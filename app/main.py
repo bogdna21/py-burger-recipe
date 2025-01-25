@@ -6,7 +6,7 @@ class Validator(ABC):
     def __set_name__(self, owner: Type, name: str) -> None:
         self.protected_name = "_" + name
 
-    def __get__(self, instance: Optional[object], owner: Type) -> Optional[object]:
+    def __get__(self, instance: Optional[object], owner: Type) -> Optional:
         return getattr(instance, self.protected_name, None)
 
     def __set__(self, instance: object, value: object) -> None:
@@ -39,7 +39,8 @@ class OneOf(Validator):
 
     def validate(self, value: str) -> None:
         if not isinstance(value, str):
-            raise TypeError(f"Expected a string, but got {type(value).__name__}.")
+            raise TypeError(
+                f"Expected a string, but got {type(value).__name__}.")
         if value not in self.options:
             raise ValueError(f"Expected {value} to be one of {self.options}.")
 
